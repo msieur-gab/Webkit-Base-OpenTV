@@ -1,0 +1,648 @@
+<html>
+<head>
+<style type="text/css">
+UL,LI{padding:0px;margin:0px}
+body, html{padding:0px;margin:0px;
+height: 100%;
+overflow:hidden
+}
+#background{position:absolute; height:100%;width:100%;background: transparent url(img/home_background.png) left top no-repeat;z-index:1}
+#overlay {position:absolute; height:100%;width:100%;background-color: rgba(125,125,125,.7);z-index:4}
+#content {position:absolute; height:10%;width:100%;background-color: rgba(0,0,0,.7);z-index:11;color:#FFF;}
+
+div.scroll-container > div > div > div > div {
+/*background-color: #333;*/
+color: #26A6CE;
+width: 272px;
+height: 160px;
+/*top: 2%;*/
+/*left: 2%;*/
+position: relative;
+}
+div.scroll-container > div > div > div {
+float: left;
+/*background-color: #aaa;*/
+/*width: 278px;*/
+/*height: 160px;*/
+/*padding:0px;*/
+padding:1% 4% 1% 4%;
+}
+div.scroll-container > div > div {
+display: inline-block;
+white-space: normal;
+font-size: 24px;
+width: 100%;
+height: 100%;
+}
+div.scroll-container > div {
+position: relative;
+-webkit-transition: 1s left ease-in-out;
+white-space: nowrap;
+width: 100%;
+height: 100%;
+font-size: 0px;
+}
+div.scroll-container {
+/*-webkit-box-shadow: 0px 0px 5px 6px #777;*/
+z-index:20;
+top:50px;left:8%;
+position: absolute;
+overflow: hidden;
+width: 1104px;
+height: 90%;
+
+}
+
+.focused > div.one{background: url(img/photoframe_background.png) -272px 0px no-repeat;}
+.focused > div.two{background: url(img/photoframe_background.png) -272px -160px no-repeat;}
+.focused > div.tree{background: url(img/photoframe_background.png) -272px -320px no-repeat;}
+.focused > div.four{background: url(img/photoframe_background.png) -272px -480px no-repeat;}
+
+
+.one{background: url(img/photoframe_background.png) 0px 0px no-repeat;}
+.two{background: url(img/photoframe_background.png) 0px -160px no-repeat;}
+.tree{background: url(img/photoframe_background.png) 0px -320px no-repeat;}
+.four{background: url(img/photoframe_background.png) 0px -480px no-repeat;}
+
+.hidden{visibility:hidden;}
+.close{color:green}
+/**/
+/*.active{display:block;}*/
+/*.inactive{display:none;}*/
+
+#gallery{
+        /*display: block;*/
+        /*padding-top:60px;*/
+ position: absolute;
+    z-index:50;
+    /*right: 30px;*/
+    -webkit-transition : 0.5s right ease-in-out;
+    /*background-color: #333;*/
+    /*background: rgba(125,125,125,.7) url(thumb.png) 40px 74px no-repeat;*/
+        background: rgba(125,125,125,.7) ;
+        /*background-color: #333;*/
+    /*margin:0px;*/
+    width:820px;
+    height:100%;
+    overflow: hidden;}
+/*#gallery ul{margin:0px auto;float:right;width:30%}*/
+/*#gallery li{float:left; padding: 10px 2px 10px 6px; margin:0px 2px; text-transform: capitalize; font-weight:bold;background-color:#333;}*/
+
+.hideGallery{right:-820px;}
+.showGallery{right:0px;}
+
+
+
+/*////////////////////////////////////////////////////*/
+div.contactList > div > div {
+
+
+color: #eee;
+width: 100px;
+height: 100px;
+/*padding: 5px;*/
+font-size: 20px;
+border: 5px solid #eee;
+
+}
+div.contactList > div > div {background: 64px 28px;}
+div.contactList > div > div > div > ul {visibility:hidden;}
+/*div.contactList > div > div > div {height:100px;width:100px;background: rgba(150,150,150,.6);}*/
+div.contactList > div {
+position: relative;
+-webkit-transition: .5s top ease-in-out;
+}
+div.contactList {
+        margin-top:80px;
+height: 100%;
+float: left;
+/*overflow:hidden;*/
+}
+.ContactItem-highlight {
+        height:110px;width:100px;
+/*border-color: #0e0 !important;*/
+background: rgba(12,198,200,.6) !important;
+}
+</style>
+
+<script type="text/javascript">
+
+
+function $(id){
+    if (document.getElementById)
+        var returnVar = document.getElementById(id);
+    else if (document.all)
+        var returnVar = document.all[id];
+    else if (document.layers)
+        var returnVar = document.layers[id];
+    return returnVar;
+}
+
+///////////////////////////////////////////
+//var gallery = 0;
+
+function toggleGallery(){
+    if (gallery == 1){
+	setTimeout ("$('gallery').className = 'hideGallery';",200);
+	gallery = 0;
+	console.log ("je masque" + gallery);
+    }
+    else{if (gallery == 0 ){
+	$('gallery').className = 'showGallery';
+	gallery = 1;
+	console.log ("je suis visible" + gallery);
+    }
+    }
+
+}
+    
+////////////////////////////////////////    
+var highlightItem = 0;
+
+window.addEventListener('load', function() {
+document.getElementById("gallery").className = 'hideGallery'; gallery = 0;
+enableScrolling();
+document.getElementsByTagName('video')[0].webkitEnterFullscreen();
+//enableContactScrolling();
+//toggleGallery();
+});
+
+function enableScrolling() {
+document.addEventListener('keydown', function(e) {
+        
+var contactDir;
+var dirX = 0;
+var dirY = 0;
+if (e.keyCode == 37) {
+         if(gallery==0){
+                dirX = -1;}else{
+// Left arrow key
+$('gallery').className = 'hideGallery';gallery = 0;
+                }
+} else if (e.keyCode == 39) {
+                if(gallery==0){
+dirX = 1;}else{}
+// Right arrow key
+//$('gallery').className = 'hideGallery';gallery = 0;
+
+} else if (e.keyCode == 38) {
+        console.log ("etat gallery" + gallery);
+        if(gallery==0){
+               
+// Up arrow key
+//$('gallery').className = 'hideGallery';gallery = 0;
+contactDir = 0;
+dirY = -1;}else{
+        //enableContactScrolling();
+        //contactDir = -1;
+        moveContactSelection(-1);
+var content = document.getElementById('content');
+var ContactItems =
+document.querySelectorAll('div.contactList > div > div > div');
+content.innerHTML = "You chose ContactItem "
++ ContactItems[highlightContactItem].innerHTML;
+        console.log ("etat gallery" + contactDir);}
+} else if (e.keyCode == 40) {
+        if(gallery==0){
+// Down arrow key
+//$('gallery').className = 'hideGallery';gallery = 0;
+contactDir = 0;
+dirY = 1;}else{
+//enableContactScrolling();
+//contactDir = 1;
+moveContactSelection(1);
+var content = document.getElementById('content');
+var ContactItems =
+document.querySelectorAll('div.contactList > div > div > div');
+content.innerHTML = "You chose ContactItem "
++ ContactItems[highlightContactItem].innerHTML;
+
+    }
+
+} else if (e.keyCode == 13) {
+        if(gallery == 0){
+// User pressed ENTER
+var content = document.getElementById('content');
+var items = document.querySelectorAll('div.scroll-container > div > div > div > div');
+var pageContainers =
+document.querySelectorAll("div.scroll-container > div > div")
+pageContainers[0].children.className +=' hidden';
+content.innerHTML = "You chose item "
++ items[highlightItem].innerHTML;
+toggleGallery();}else{
+
+var content = document.getElementById('content');
+var ContactItems =
+document.querySelectorAll('div.contactList > div > div > div');
+content.innerHTML = "You chose ContactItem "
++ ContactItems[highlightContactItem].innerHTML;
+ 
+}
+
+}
+//if (contactDir) {
+//moveContactSelection(contactDir);
+//}
+//});
+//moveContactSelection(0);
+//
+//}
+
+if (dirX || dirY) {
+moveSelection(dirX, dirY);
+}
+if (contactDir) {
+moveContactSelection(contactDir);
+}
+});
+moveSelection(0, 0);
+moveContactSelection(0);
+
+}
+
+function sign(val) {
+if (val > 0) {
+return 1;
+} else if (val < 0) {
+return -1;
+}
+return 0;
+}
+
+function calcDistance(from, to, dirX, dirY) {
+var fromLeft = from.offsetLeft + from.parentElement.offsetLeft;
+var fromTop = from.offsetTop + from.parentElement.offsetTop;
+
+var toLeft = to.offsetLeft + to.parentElement.offsetLeft;
+var toTop = to.offsetTop + to.parentElement.offsetTop;
+
+var dx = toLeft - fromLeft;
+
+
+
+var dy = toTop - fromTop;
+
+if (sign(dx) != dirX || sign(dy) != dirY)
+return -1;
+
+var distance = Math.sqrt((dx * dx) + (dy * dy));
+return distance;
+
+}
+
+function moveSelection(dirX, dirY) {
+// Get an array of all items in the list.
+var items =
+document.querySelectorAll("div.scroll-container > div > div > div");
+
+// Unhighlight the currently highlighted item.
+var currentItem = items[highlightItem];
+currentItem.className =
+currentItem.className.replace(/\s*focused\s*/, '');
+
+
+// Loop through all items, looking for the closest item in the
+// correct direction of movement.
+var minDist;
+var newHighlightItem = highlightItem;
+for (var i = 0; i < items.length; i++) {
+var dist = calcDistance(currentItem, items[i], dirX, dirY);
+if (dist > 0 && (minDist == undefined || dist < minDist)) {
+minDist = dist;
+newHighlightItem = i;
+}
+}
+
+highlightItem = newHighlightItem;
+
+// Get an array of all the pages. Use the number of items on the
+// first page to calculate the page number the highlighted item is on.
+var pageContainers =
+document.querySelectorAll("div.scroll-container > div > div");
+var pageNum = Math.floor(highlightItem /
+pageContainers[0].children.length);
+
+// Highlight the new item.
+var item = items[highlightItem];
+item.className += ' focused';
+
+console.log("className" + item.className);
+
+// Move the container of items far enough in the correct direction
+// to make the new item visible.
+var container = document.querySelector("div.scroll-container > div");
+var pageLeft = pageContainers[pageNum].offsetLeft;
+var left = parseInt(container.style.left) || 0;
+container.style.left = -pageLeft + 'px';
+var pageTop = pageContainers[pageNum].offsetTop;
+var top = parseInt(container.style.top) || 0;
+container.style.top = -pageTop + 'px';
+
+}
+
+//////////////////////////
+
+var highlightContactItem = 0;
+
+//window.addEventListener('load', function() {
+//enableContactScrolling();
+//});
+
+//
+//function enableContactScrolling() {
+//document.addEventListener('keydown', function(e) {
+//var contactDir;
+//if (e.keyCode == 38) {
+//// Left arrow key
+//contactDir = -1;
+//} else if (e.keyCode == 40) {
+//// Right arrow key
+//contactDir = 1;
+//} else if (e.keyCode == 13) {
+//// User pressed ENTER
+//var content = document.getElementById('content');
+//var ContactItems =
+//document.querySelectorAll('div.contactList > div > div');
+//content.innerHTML = "You chose ContactItem "
+//+ ContactItems[highlightContactItem].innerHTML;
+//}
+//
+//if (contactDir) {
+//moveContactSelection(contactDir);
+//}
+//});
+//moveContactSelection(0);
+//
+//}
+
+function moveContactSelection(contactDir) {
+// Get an array of all ContactItems in the list.
+
+
+var ContactItems =
+document.querySelectorAll('div.contactList > div > div > div');
+if (highlightContactItem + contactDir < 0 || highlightContactItem + contactDir >= ContactItems.length) {
+// Prevent movement from going off either end of the list of ContactItems.
+return;
+}
+// Unhighlight the currently highlighted ContactItem.
+ContactItems[highlightContactItem].className =
+ContactItems[highlightContactItem].className.replace(/\s*ContactItem-highlight\s*/, '');
+
+// Move to the next ContactItem in the requested contactDirection.
+highlightContactItem += contactDir;
+
+// Highlight the new ContactItem.
+var ContactItem = ContactItems[highlightContactItem];
+ContactItem.className += ' ContactItem-highlight';
+
+// Move the contactContainer of ContactItems far enough in the correct contactDirection
+// to make the new ContactItem visible.
+var ContactItemHeight = ContactItem.offsetHeight;
+var contactContainer = document.querySelector("div.contactList > div");
+var top = parseInt(contactContainer.style.top) || 0;
+contactContainer.style.top = top - (ContactItemHeight * contactDir) + 'px';
+
+}
+</script>
+</head>
+<!--document.getElementsByTagName('video')[0].webkitEnterFullscreen();-->
+<body>
+        
+        
+
+
+
+    <div id="background"><video autoplay="autoplay" loop="loop"><source src="BeachLoopHD720.mp4" type="video/mp4" />
+  <!--<source src="movie.ogg" type="video/ogg" />-->
+  Your browser does not support the video tag.
+</video></div>
+    <!--<div id="overlay"></div>-->
+    <div id="gallery">tralalal
+    <!--<div id="content">-->
+        
+        <div class="contactList">
+<div>
+<div style="background:url(img/contact/ProfilThumb_001.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzane Flint</li>
+                        <li></li>
+                </ul>
+        </div>
+</div>
+      
+<div style="background:url(img/contact/ProfilThumb_002.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Brown Family</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_003.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne Broucks</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_004.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Uncle Tom</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_005.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Pamela Ross</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_006.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Luck Slater</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_007.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Peter Brooks</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_008.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Grand'Pa</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_009.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Francky</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_010.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Tommy </li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_011.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Laura Hasley</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_012.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Arthur Mint</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_013.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Peter Mint</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_014.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Emili Mint</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_015.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_016.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_017.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Akiko Murakami</li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_018.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Naomi </li>
+                        <li></li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_019.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_020.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_021.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_022.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div><div style="background:url(img/contact/ProfilThumb_023.jpg) no-repeat;">
+        <div>
+                <ul>
+                        <li>Suzanne</li>
+                        <li>Broucks</li>
+                </ul>
+        </div>
+</div>
+</div>
+</div>
+<div>
+<p id="content">Highlight an ContactItem and press ENTER to choose.</p>
+</div>
+    </div>
+    <!--</div>-->
+<!---->
+
+<div class="scroll-container">
+<div>
+<!--<div class="page-container">-->
+<!--<div><div class="four">4</div></div>-->
+<!--<div><div class="two">2</div></div>-->
+<!--<div><div class="one">1</div></div>-->
+<!--<div><div class="tree">3</div></div>-->
+<!--<div><div class="four">4</div></div>-->
+<!--<div><div class="tree">3</div></div>-->
+<!--<div><div class="one">1</div></div>-->
+<!--<div><div class="one">1</div></div>-->
+<!--<div><div class="four">4</div></div>-->
+<!--</div>-->
+<!--<div class="page-container">-->
+<!--<div><div class="one">1</div></div>-->
+<!--<div><div class="two">2</div></div>-->
+<!--<div><div class="tree">3</div></div>-->
+<!--<div><div class="four">4</div></div>-->
+<!--<div><div class="tree">3</div></div>-->
+<!--<div><div class="one">1</div></div>-->
+<!--<div><div class="four">4</div></div>-->
+<!--<div><div class="two">2</div></div>-->
+<!--<div><div class="one">1</div></div>-->
+<!---->
+<!--</div>-->
+<div class="page-container">
+<div><div class="four">4</div></div>
+<div><div class="tree">3</div></div>
+<div><div class="one">1</div></div>
+<div><div class="one">1</div></div>
+<div><div class="four">4</div></div>
+<div><div class="one">1</div></div>
+<div><div class="two">2</div></div>
+<div><div class="tree">3</div></div>
+<div><div class="four">4</div></div>
+
+</div>
+<div class="page-container">
+<div><div class="one">1</div></div>
+<div><div class="two">2</div></div>
+<div><div class="tree">3</div></div>
+<div><div class="four">4</div></div>
+<div><div class="tree">3</div></div>
+<div><div></div></div>
+<div><div></div></div>
+</div>
+</div>
+</div>
+</body>
+</html>
